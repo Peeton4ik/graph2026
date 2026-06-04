@@ -1,42 +1,42 @@
 /**
- * @file methods/prim_algorithm_method.cpp
- * @author Your Name
+ * @file prim_algorithm_method.cpp
+ * @author Peeton4ik
  *
  * Серверная часть алгоритма Прима.
  */
 
 #include <string>
 #include <vector>
+
 #include "methods.hpp"
-#include "../include/prim_algorithm.hpp"
 #include "nlohmann/json.hpp"
+
+#include "../include/prim_algorithm.hpp"
 
 namespace graph {
 
 int PrimAlgorithmMethod(const nlohmann::json& input,
                         nlohmann::json* output) {
   try {
-
     if (!input.contains("vertices") || !input.contains("edges")) {
-      (*output)["error"] = "Отсутствуют обязательные поля: vertices или edges";
+      (*output)["error"] =
+          "Отсутствуют обязательные поля: vertices или edges";
       return 1;
     }
 
-
     WeightedGraph<double> graph;
-
 
     const auto& vertices = input["vertices"];
     for (const auto& vertex : vertices) {
       graph.AddVertex(vertex.get<size_t>());
     }
 
-
     const auto& edges = input["edges"];
     for (const auto& edge : edges) {
       if (!edge.contains("from") || !edge.contains("to") ||
           !edge.contains("weight")) {
-        (*output)["error"] = "Ребро должно содержать поля: from, to, weight";
+        (*output)["error"] =
+            "Ребро должно содержать поля: from, to, weight";
         return 1;
       }
 
@@ -54,9 +54,7 @@ int PrimAlgorithmMethod(const nlohmann::json& input,
       start_vertex = vertices[0].get<size_t>();
     }
 
-
     std::vector<PrimEdge> mst_edges = PrimAlgorithm(graph, start_vertex);
-
 
     nlohmann::json result_edges = nlohmann::json::array();
     double total_weight = 0.0;

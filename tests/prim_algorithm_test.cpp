@@ -1,24 +1,26 @@
 /**
  * @file tests/prim_algorithm_test.cpp
- * @author Your Name
+ * @author Peeton4ik
  *
  * Тесты для алгоритма Прима.
  */
 
 #include <cmath>
 #include <random>
-#include "test_core.hpp"
+#include <vector>
+
 #include "test.hpp"
+#include "test_core.hpp"
+
 #include "../include/prim_algorithm.hpp"
 #include "httplib.h"
 #include "nlohmann/json.hpp"
 
 namespace {
 
-using graph::WeightedGraph;
 using graph::PrimAlgorithm;
 using graph::PrimEdge;
-
+using graph::WeightedGraph;
 
 static void SimpleTest() {
   WeightedGraph<double> graph;
@@ -36,23 +38,18 @@ static void SimpleTest() {
 
   std::vector<PrimEdge> mst = PrimAlgorithm(graph, 1);
 
-
   REQUIRE_EQUAL(mst.size(), static_cast<size_t>(3));
-
 
   double total_weight = 0.0;
   for (const auto& edge : mst) {
     total_weight += edge.weight;
   }
 
-
   REQUIRE_CLOSE(total_weight, 6.0, 0.001);
 }
 
-
 static void LinearGraphTest() {
   WeightedGraph<double> graph;
-
 
   graph.AddVertex(1);
   graph.AddVertex(2);
@@ -72,10 +69,8 @@ static void LinearGraphTest() {
     total_weight += edge.weight;
   }
 
-
   REQUIRE_CLOSE(total_weight, 15.0, 0.001);
 }
-
 
 static void CompleteGraphTest() {
   WeightedGraph<double> graph;
@@ -151,7 +146,7 @@ static void RandomGraphTest(httplib::Client* cli) {
   std::uniform_real_distribution<double> weight_dist(1.0, 100.0);
 
   size_t num_vertices = vertex_dist(gen);
-  
+
   nlohmann::json request;
   nlohmann::json vertices = nlohmann::json::array();
   nlohmann::json edges = nlohmann::json::array();
@@ -174,7 +169,7 @@ static void RandomGraphTest(httplib::Client* cli) {
   for (size_t i = 0; i < extra_edges; ++i) {
     size_t from = vertex_dist(gen) % num_vertices + 1;
     size_t to = vertex_dist(gen) % num_vertices + 1;
-    
+
     if (from != to) {
       nlohmann::json edge;
       edge["from"] = from;
@@ -187,8 +182,8 @@ static void RandomGraphTest(httplib::Client* cli) {
   request["vertices"] = vertices;
   request["edges"] = edges;
 
-  auto res = cli->Post("/PrimAlgorithm", request.dump(),
-                       "application/json");
+  auto res =
+      cli->Post("/PrimAlgorithm", request.dump(), "application/json");
 
   REQUIRE(res != nullptr);
   REQUIRE_EQUAL(res->status, 200);
@@ -196,7 +191,6 @@ static void RandomGraphTest(httplib::Client* cli) {
   nlohmann::json response = nlohmann::json::parse(res->body);
 
   REQUIRE(!response.contains("error"));
-
   REQUIRE(response.contains("mst_edges"));
   REQUIRE(response.contains("total_weight"));
   REQUIRE(response.contains("num_edges"));
