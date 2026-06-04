@@ -109,13 +109,16 @@ include_directories(${GRAPH_INCLUDE_DIRS})
 
 add_executable(
   graph_server
+  
   include/graph.hpp
   include/iterators.hpp
   include/oriented_graph.hpp
+  include/prim_algorithm.hpp
   include/weighted_graph.hpp
   include/weighted_oriented_graph.hpp
   methods/main.cpp
   methods/methods.hpp
+  methods/prim_algorithm_method.cpp
 )
 
 ####################################################################
@@ -138,12 +141,14 @@ add_executable(
   include/graph.hpp
   include/iterators.hpp
   include/oriented_graph.hpp
+  include/prim_algorithm.hpp
   include/weighted_graph.hpp
   include/weighted_oriented_graph.hpp
   tests/graph_test.cpp
   tests/io.hpp
   tests/main.cpp
   tests/oriented_graph_test.cpp
+  tests/prim_algorithm_test.cpp
   tests/test.hpp
   tests/test_core.cpp
   tests/test_core.hpp

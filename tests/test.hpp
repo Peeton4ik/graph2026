@@ -32,7 +32,8 @@ void TestWeightedOrientedGraph();
 
 /* Сюда нужно добавить объявления тестовых функций. */
 
-
+void TestPrimAlgorithm();
+void TestPrimAlgorithmRemote(httplib::Client* cli);
 
 /* Конец вставки. */
 
