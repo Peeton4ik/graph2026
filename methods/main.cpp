@@ -40,9 +40,7 @@ svr.Post("/PrimAlgorithm", [&](const httplib::Request& req,
                                 httplib::Response& res) {
   nlohmann::json input = nlohmann::json::parse(req.body);
   nlohmann::json output;
-  
   int result = graph::PrimAlgorithmMethod(input, &output);
-  
   res.status = result == 0 ? 200 : 400;
   res.set_content(output.dump(), "application/json");
 });
